@@ -1,0 +1,32 @@
+{
+  "name": "scrappy",
+  "version": "1.0.0",
+  "description": "Lead scraper pour freelances web — scrape, score et gere des prospects depuis Google Maps",
+  "homepage": "https://github.com/arthursaugycpnv/sc-c313-ProjGrp-Scrappy#readme",
+  "bugs": {
+    "url": "https://github.com/arthursaugycpnv/sc-c313-ProjGrp-Scrappy/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arthursaugycpnv/sc-c313-ProjGrp-Scrappy.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "jest --passWithNoTests",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.2.1",
+    "globals": "^17.5.0",
+    "jest": "^30.3.0"
+  }
+}
