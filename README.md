@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a Next.js (App Router) marketing site for an AI lead discovery / scraping product.
+
+It's inspired by the _structure and UX logic_ of tenji.ai (not the design or code). The visual identity, copywriting, and components are original.
 
 ## Getting Started
 
@@ -16,9 +18,31 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Localized routes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project uses locale-prefixed routes with `next-intl`:
+
+- `/fr` (default)
+- `/en`
+- `/de`
+- `/it`
+
+Main pages:
+
+- `/$locale` (Home)
+- `/$locale/features`
+- `/$locale/pricing`
+- `/$locale/integrations`
+- `/$locale/demo`
+- `/$locale/contact`
+- `/$locale/legal/privacy`
+- `/$locale/legal/terms`
+
+Language routing is handled by `src/proxy.ts` (Next.js proxy convention).
+
+You can start editing the pages under `src/app/[locale]/*`.
+
+Animations are done with Framer Motion.
 
 ## Learn More
 
