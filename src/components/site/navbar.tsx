@@ -79,8 +79,9 @@ const nav = {
 export function Navbar({ locale }: { locale: Locale }) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
-  const [authed, setAuthed] = useState(false);
-  const [themePref, setThemePref] = useState<ThemePreference>("system");
+  const [themePref, setThemePref] = useState<ThemePreference>(() =>
+    getStoredTheme(),
+  );
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 6);
@@ -90,15 +91,14 @@ export function Navbar({ locale }: { locale: Locale }) {
   }, []);
 
   useEffect(() => {
-    // MVP auth: cookie presence check on client.
-    setAuthed(document.cookie.includes("scrappy_session="));
-  }, [pathname]);
+    applyThemePreference(themePref);
+  }, [themePref]);
 
-  useEffect(() => {
-    const pref = getStoredTheme();
-    setThemePref(pref);
-    applyThemePreference(pref);
-  }, []);
+  const authed = useMemo(() => {
+    // MVP auth: cookie presence check on client.
+    if (typeof document === "undefined") return false;
+    return document.cookie.includes("scrappy_session=");
+  }, [pathname]);
 
   const items = useMemo(() => nav[locale], [locale]);
 

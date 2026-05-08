@@ -42,12 +42,6 @@ export function useLeadStore() {
   const [state, setState] = useState<StoreState>(() => readStorage());
 
   useEffect(() => {
-    // Ensure derived fields are present for legacy entries.
-    setState((s) => ({ leads: s.leads.map(withDerivedFields) }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     if (typeof window === "undefined") return;
     writeStorage(state);
   }, [state]);
