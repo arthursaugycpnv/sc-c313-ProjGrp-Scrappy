@@ -67,7 +67,7 @@ export function ContactPage() {
                   placeholder={t.form.msgPh}
                 />
               </label>
-              <button className="mt-2 inline-flex h-11 items-center justify-center rounded-full bg-foreground px-5 text-sm font-medium text-background hover:opacity-90">
+              <button className="btn btn-primary mt-2 h-11">
                 {t.form.submit}
               </button>
               <p className="text-xs text-[rgb(var(--foreground))]/60">

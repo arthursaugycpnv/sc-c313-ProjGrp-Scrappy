@@ -72,3 +72,50 @@ body {
 * {
   outline-color: rgb(var(--brand-500));
 }
+
+/* Global button styling helpers.
+   Use `btn` + `btn-primary` (default) or `btn-subtle` for secondary actions.
+   This makes buttons a bit darker everywhere while still respecting light/dark themes.
+*/
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    filter 150ms ease,
+    opacity 150ms ease;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+}
+
+.btn-primary {
+  /* Darker than `bg-foreground` in light mode, still readable in dark mode. */
+  background: rgb(var(--foreground));
+  color: rgb(var(--background));
+  filter: brightness(0.85);
+}
+
+.btn-primary:hover {
+  filter: brightness(0.78);
+}
+
+.btn-subtle {
+  background: rgb(var(--muted));
+  color: rgb(var(--foreground));
+}
+
+.btn-subtle:hover {
+  filter: brightness(0.95);
+}

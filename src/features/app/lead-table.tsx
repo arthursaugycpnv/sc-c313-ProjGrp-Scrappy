@@ -121,7 +121,8 @@ export function LeadTable({
     return [...filtered].sort((a, b) => {
       const av = get(a);
       const bv = get(b);
-      if (typeof av === "number" && typeof bv === "number") return (av - bv) * dir;
+      if (typeof av === "number" && typeof bv === "number")
+        return (av - bv) * dir;
       return compareText(String(av), String(bv)) * dir;
     });
   }, [filtered, sort]);
@@ -224,9 +225,11 @@ export function LeadTable({
                     <Badge
                       className={cn(
                         color === "green" &&
-                          "bg-emerald-500/15 text-emerald-300",
-                        color === "orange" && "bg-amber-500/15 text-amber-300",
-                        color === "red" && "bg-rose-500/15 text-rose-300",
+                          "bg-emerald-500/50 text-black dark:text-white",
+                        color === "orange" &&
+                          "bg-amber-500/50 text-black dark:text-white",
+                        color === "red" &&
+                          "bg-rose-500/50 text-black dark:text-white",
                       )}
                     >
                       {score}%

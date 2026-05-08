@@ -217,7 +217,7 @@ export function Navbar({ locale }: { locale: Locale }) {
           ) : null}
           <Link
             href={`/${locale}/pricing`}
-            className="hidden md:inline-flex h-10 items-center justify-center rounded-full bg-foreground px-4 text-sm font-medium text-background hover:opacity-90"
+            className="btn btn-primary hidden md:inline-flex h-10 px-4"
           >
             {items.cta}
           </Link>
@@ -293,7 +293,7 @@ function MobileMenu({
             ) : null}
             <Link
               href={`/${locale}/pricing`}
-              className="mt-2 inline-flex h-10 items-center justify-center rounded-full bg-foreground px-4 text-sm font-medium text-background"
+              className="btn btn-primary mt-2 inline-flex h-10 px-4"
               onClick={() => setOpen(false)}
             >
               {cta}

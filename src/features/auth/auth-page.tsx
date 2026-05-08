@@ -102,7 +102,7 @@ export function AuthPage({
           <button
             onClick={submit}
             disabled={loading || !email || password.length < 4}
-            className="h-11 rounded-full bg-foreground px-5 text-sm font-medium text-background disabled:opacity-60"
+            className="btn btn-primary h-11"
           >
             {loading
               ? "…"
