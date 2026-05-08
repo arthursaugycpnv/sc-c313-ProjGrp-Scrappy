@@ -6,6 +6,10 @@ import { useLocale } from "next-intl";
 import { Section } from "@/components/ui/section";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+
+const blueCard =
+  "border-brand-500/25 bg-gradient-to-br from-brand-500/10 via-[rgb(var(--card))] to-cyan-400/10 transition-all duration-200 ease-out hover:border-brand-500/35 hover:shadow-lg hover:shadow-brand-500/10 hover:-translate-y-0.5 hover:scale-[1.02]";
 
 export function IntegrationsPage() {
   const locale = useLocale() as "fr" | "en" | "de" | "it";
@@ -32,7 +36,7 @@ export function IntegrationsPage() {
       <Section className="pt-0">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {t.items.map((it) => (
-            <Card key={it.name}>
+            <Card key={it.name} className={cn(blueCard, "group")}>
               <div className="flex items-center gap-3">
                 <div className="flex size-10 items-center justify-center rounded-2xl bg-[rgb(var(--muted))] text-sm font-semibold">
                   {it.logo}

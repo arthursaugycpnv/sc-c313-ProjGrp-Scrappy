@@ -7,6 +7,10 @@ import Link from "next/link";
 import { Section } from "@/components/ui/section";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+
+const blueCard =
+  "border-brand-500/25 bg-gradient-to-br from-brand-500/10 via-[rgb(var(--card))] to-cyan-400/10 transition-all duration-200 ease-out hover:border-brand-500/35 hover:shadow-lg hover:shadow-brand-500/10 hover:-translate-y-0.5 hover:scale-[1.02]";
 
 export function DemoPage() {
   const locale = useLocale() as "fr" | "en" | "de" | "it";
@@ -34,7 +38,7 @@ export function DemoPage() {
 
       <Section className="pt-0">
         <div className="grid gap-6 md:grid-cols-2 md:items-start">
-          <Card>
+          <Card className={cn(blueCard)}>
             <div className="text-sm font-semibold">{t.walkthrough.title}</div>
             <p className="mt-2 text-sm text-[rgb(var(--foreground))]/70">
               {t.walkthrough.desc}
@@ -54,7 +58,7 @@ export function DemoPage() {
             </div>
           </Card>
 
-          <Card>
+          <Card className={cn(blueCard)}>
             <div className="text-sm font-semibold">{t.video.title}</div>
             <p className="mt-2 text-sm text-[rgb(var(--foreground))]/70">
               {t.video.desc}

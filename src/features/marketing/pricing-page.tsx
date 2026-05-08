@@ -7,6 +7,10 @@ import Link from "next/link";
 import { Section } from "@/components/ui/section";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+
+const blueCard =
+  "border-brand-500/25 bg-gradient-to-br from-brand-500/10 via-[rgb(var(--card))] to-cyan-400/10 transition-all duration-200 ease-out hover:border-brand-500/35 hover:shadow-lg hover:shadow-brand-500/10 hover:-translate-y-0.5 hover:scale-[1.02]";
 
 export function PricingPage() {
   const locale = useLocale() as "fr" | "en" | "de" | "it";
@@ -33,7 +37,10 @@ export function PricingPage() {
       <Section className="pt-0">
         <div className="grid gap-6 md:grid-cols-3">
           {t.plans.map((p) => (
-            <Card key={p.name} className={p.highlight ? "relative" : undefined}>
+            <Card
+              key={p.name}
+              className={cn(blueCard, p.highlight ? "relative" : undefined)}
+            >
               {p.highlight ? (
                 <div className="absolute -top-3 right-6 rounded-full bg-[rgb(var(--brand-500))] px-3 py-1 text-xs font-semibold text-white">
                   {t.mostPopular}
@@ -81,7 +88,7 @@ export function PricingPage() {
       <Section>
         <div className="grid gap-6 md:grid-cols-2">
           {t.faq.map((q) => (
-            <Card key={q.q}>
+            <Card key={q.q} className={blueCard}>
               <div className="text-sm font-semibold">{q.q}</div>
               <p className="mt-2 text-sm text-[rgb(var(--foreground))]/70">
                 {q.a}
