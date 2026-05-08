@@ -11,9 +11,21 @@ import { cn } from "@/lib/utils";
 type NavLink = { href: string; label: string };
 type NavCopy = { links: NavLink[]; cta: string };
 
+function isActivePath(pathname: string | null, href: string) {
+  if (!pathname) return false;
+  // pathname includes locale prefix, e.g. /fr/demo
+  if (href === "/") return pathname === "/";
+  return (
+    pathname === href ||
+    pathname.endsWith(href) ||
+    pathname.includes(`${href}/`)
+  );
+}
+
 const nav = {
   fr: {
     links: [
+      { href: "/app", label: "Dashboard" },
       { href: "/features", label: "Fonctionnalités" },
       { href: "/pricing", label: "Tarifs" },
       { href: "/integrations", label: "Intégrations" },
@@ -24,6 +36,7 @@ const nav = {
   },
   en: {
     links: [
+      { href: "/app", label: "Dashboard" },
       { href: "/features", label: "Features" },
       { href: "/pricing", label: "Pricing" },
       { href: "/integrations", label: "Integrations" },
@@ -34,6 +47,7 @@ const nav = {
   },
   de: {
     links: [
+      { href: "/app", label: "Dashboard" },
       { href: "/features", label: "Funktionen" },
       { href: "/pricing", label: "Preise" },
       { href: "/integrations", label: "Integrationen" },
@@ -44,6 +58,7 @@ const nav = {
   },
   it: {
     links: [
+      { href: "/app", label: "Dashboard" },
       { href: "/features", label: "Funzionalità" },
       { href: "/pricing", label: "Prezzi" },
       { href: "/integrations", label: "Integrazioni" },
@@ -57,6 +72,7 @@ const nav = {
 export function Navbar({ locale }: { locale: Locale }) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [authed, setAuthed] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 6);
@@ -64,6 +80,11 @@ export function Navbar({ locale }: { locale: Locale }) {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    // MVP auth: cookie presence check on client.
+    setAuthed(document.cookie.includes("scrappy_session="));
+  }, [pathname]);
 
   const items = useMemo(() => nav[locale], [locale]);
 
@@ -84,30 +105,55 @@ export function Navbar({ locale }: { locale: Locale }) {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex">
-          {items.links.map((l: NavLink) => (
-            <Link
-              key={l.href}
-              href={`/${locale}${l.href}`}
-              className={cn(
-                "text-sm text-[rgb(var(--foreground))]/70 hover:text-[rgb(var(--foreground))] transition-colors",
-                pathname?.endsWith(l.href) ? "text-foreground" : "",
-              )}
-            >
-              {l.label}
-            </Link>
-          ))}
+        <nav className="hidden items-center gap-2 md:flex">
+          {items.links
+            .filter((l) => (l.href === "/app" ? authed : true))
+            .map((l: NavLink) => {
+              const active = isActivePath(pathname, `/${locale}${l.href}`);
+              return (
+                <Link
+                  key={l.href}
+                  href={`/${locale}${l.href}`}
+                  className={cn(
+                    "group relative rounded-full px-3 py-2 text-sm transition-all",
+                    active
+                      ? "text-[rgb(var(--foreground))] bg-gradient-to-r from-brand-500/15 to-cyan-400/15 ring-1 ring-brand-500/25 shadow-sm"
+                      : "text-[rgb(var(--foreground))]/70 hover:text-[rgb(var(--foreground))] hover:bg-[rgb(var(--muted))]/60",
+                  )}
+                >
+                  {l.label}
+                  {active ? (
+                    <span className="pointer-events-none absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-gradient-to-r from-brand-500 to-cyan-400" />
+                  ) : (
+                    <span className="pointer-events-none absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-gradient-to-r from-brand-500 to-cyan-400 opacity-0 transition-opacity group-hover:opacity-30" />
+                  )}
+                </Link>
+              );
+            })}
         </nav>
 
         <div className="flex items-center gap-2">
           <LanguageSwitcher locale={locale} />
+          {!authed ? (
+            <Link
+              href={`/${locale}/auth?next=/${locale}/app`}
+              className="hidden md:inline-flex h-10 items-center justify-center rounded-full border border-[rgb(var(--border))] px-4 text-sm font-medium hover:bg-[rgb(var(--muted))]"
+            >
+              Connexion
+            </Link>
+          ) : null}
           <Link
             href={`/${locale}/pricing`}
             className="hidden md:inline-flex h-10 items-center justify-center rounded-full bg-foreground px-4 text-sm font-medium text-background hover:opacity-90"
           >
             {items.cta}
           </Link>
-          <MobileMenu locale={locale} links={items.links} cta={items.cta} />
+          <MobileMenu
+            locale={locale}
+            links={items.links}
+            cta={items.cta}
+            authed={authed}
+          />
         </div>
       </div>
     </header>
@@ -118,12 +164,15 @@ function MobileMenu({
   locale,
   links,
   cta,
+  authed,
 }: {
   locale: Locale;
   links: Array<{ href: string; label: string }>;
   cta: string;
+  authed: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <div className="md:hidden">
@@ -138,16 +187,37 @@ function MobileMenu({
       {open ? (
         <div className="absolute left-0 right-0 top-16 border-b border-[rgb(var(--border))] bg-[rgb(var(--background))]">
           <div className="mx-auto max-w-6xl px-4 py-4 flex flex-col gap-3">
-            {links.map((l) => (
+            {links.map((l) =>
+              (() => {
+                if (l.href === "/app" && !authed) return null;
+                const active = isActivePath(pathname, `/${locale}${l.href}`);
+                return (
+                  <Link
+                    key={l.href}
+                    href={`/${locale}${l.href}`}
+                    className={cn(
+                      "py-2 text-sm rounded-xl px-3 transition-colors",
+                      active
+                        ? "bg-gradient-to-r from-brand-500/15 to-cyan-400/15 text-[rgb(var(--foreground))] ring-1 ring-brand-500/25"
+                        : "hover:bg-[rgb(var(--muted))]/60 text-[rgb(var(--foreground))]/80",
+                    )}
+                    onClick={() => setOpen(false)}
+                  >
+                    {l.label}
+                  </Link>
+                );
+              })(),
+            )}
+
+            {!authed ? (
               <Link
-                key={l.href}
-                href={`/${locale}${l.href}`}
-                className="py-2 text-sm"
+                href={`/${locale}/auth?next=/${locale}/app`}
+                className="mt-1 inline-flex h-10 items-center justify-center rounded-full border border-[rgb(var(--border))] px-4 text-sm font-medium hover:bg-[rgb(var(--muted))]"
                 onClick={() => setOpen(false)}
               >
-                {l.label}
+                Connexion
               </Link>
-            ))}
+            ) : null}
             <Link
               href={`/${locale}/pricing`}
               className="mt-2 inline-flex h-10 items-center justify-center rounded-full bg-foreground px-4 text-sm font-medium text-background"

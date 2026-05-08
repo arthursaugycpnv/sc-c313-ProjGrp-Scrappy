@@ -11,6 +11,8 @@ import { Badge } from "@/components/ui/badge";
 export function DemoPage() {
   const locale = useLocale() as "fr" | "en" | "de" | "it";
   const t = copy[locale];
+  const youtubeUrl = "https://www.youtube.com/watch?v=TopjEiuA-8w";
+  const youtubeEmbedUrl = "https://www.youtube.com/embed/TopjEiuA-8w";
 
   return (
     <div>
@@ -58,9 +60,23 @@ export function DemoPage() {
               {t.video.desc}
             </p>
             <div className="mt-4 aspect-video w-full overflow-hidden rounded-2xl border border-[rgb(var(--border))] bg-[rgb(var(--muted))]">
-              <div className="flex h-full items-center justify-center text-sm text-[rgb(var(--foreground))]/60">
-                {t.video.placeholder}
-              </div>
+              <iframe
+                className="h-full w-full"
+                src={youtubeEmbedUrl}
+                title="Demo video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
+            <div className="mt-3 text-xs text-[rgb(var(--foreground))]/60">
+              <a
+                href={youtubeUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="underline"
+              >
+                {t.video.watchOnYoutube}
+              </a>
             </div>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -106,9 +122,9 @@ const copy = {
       ],
     },
     video: {
-      title: "Vidéo (placeholder)",
-      desc: "Tu peux intégrer une vidéo Loom/YouTube ici plus tard.",
-      placeholder: "Placeholder vidéo: Loom / YouTube",
+      title: "Vidéo",
+      desc: "Démo YouTube intégrée.",
+      watchOnYoutube: "Regarder sur YouTube",
       primary: "Voir les tarifs",
       secondary: "Voir les fonctionnalités",
     },
@@ -128,9 +144,9 @@ const copy = {
       ],
     },
     video: {
-      title: "Video (placeholder)",
-      desc: "Embed a Loom/YouTube later.",
-      placeholder: "Video placeholder: Loom / YouTube",
+      title: "Video",
+      desc: "Embedded YouTube demo.",
+      watchOnYoutube: "Watch on YouTube",
       primary: "See pricing",
       secondary: "Explore features",
     },
@@ -153,9 +169,9 @@ const copy = {
       ],
     },
     video: {
-      title: "Video (Placeholder)",
-      desc: "Später Loom/YouTube einbetten.",
-      placeholder: "Video-Placeholder: Loom / YouTube",
+      title: "Video",
+      desc: "Eingebettete YouTube-Demo.",
+      watchOnYoutube: "Auf YouTube ansehen",
       primary: "Preise ansehen",
       secondary: "Funktionen",
     },
@@ -178,9 +194,9 @@ const copy = {
       ],
     },
     video: {
-      title: "Video (placeholder)",
-      desc: "Integra Loom/YouTube più avanti.",
-      placeholder: "Placeholder video: Loom / YouTube",
+      title: "Video",
+      desc: "Demo YouTube incorporata.",
+      watchOnYoutube: "Guarda su YouTube",
       primary: "Vedi prezzi",
       secondary: "Funzionalità",
     },
