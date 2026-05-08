@@ -7,6 +7,13 @@ import { useEffect, useMemo, useState } from "react";
 import type { Locale } from "@/i18n/routing";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
 import { cn } from "@/lib/utils";
+import {
+  applyThemePreference,
+  getEffectiveTheme,
+  getStoredTheme,
+  toggleTheme,
+  type ThemePreference,
+} from "@/lib/theme/theme";
 
 type NavLink = { href: string; label: string };
 type NavCopy = { links: NavLink[]; cta: string };
@@ -73,6 +80,7 @@ export function Navbar({ locale }: { locale: Locale }) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [authed, setAuthed] = useState(false);
+  const [themePref, setThemePref] = useState<ThemePreference>("system");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 6);
@@ -85,6 +93,12 @@ export function Navbar({ locale }: { locale: Locale }) {
     // MVP auth: cookie presence check on client.
     setAuthed(document.cookie.includes("scrappy_session="));
   }, [pathname]);
+
+  useEffect(() => {
+    const pref = getStoredTheme();
+    setThemePref(pref);
+    applyThemePreference(pref);
+  }, []);
 
   const items = useMemo(() => nav[locale], [locale]);
 
@@ -134,6 +148,25 @@ export function Navbar({ locale }: { locale: Locale }) {
 
         <div className="flex items-center gap-2">
           <LanguageSwitcher locale={locale} />
+          <button
+            type="button"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[rgb(var(--border))] hover:bg-[rgb(var(--muted))]"
+            aria-label={
+              getEffectiveTheme(themePref) === "dark"
+                ? "Activer le thème clair"
+                : "Activer le thème sombre"
+            }
+            onClick={() => setThemePref((prev) => toggleTheme(prev))}
+            title={
+              getEffectiveTheme(themePref) === "dark"
+                ? "Thème clair"
+                : "Thème sombre"
+            }
+          >
+            <span className="text-sm">
+              {getEffectiveTheme(themePref) === "dark" ? "☀" : "🌙"}
+            </span>
+          </button>
           {!authed ? (
             <Link
               href={`/${locale}/auth?next=/${locale}/app`}
