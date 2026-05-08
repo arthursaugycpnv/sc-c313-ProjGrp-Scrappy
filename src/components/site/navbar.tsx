@@ -113,7 +113,12 @@ export function Navbar({ locale }: { locale: Locale }) {
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Link href={`/${locale}`} className="flex items-center gap-2">
-          <div className="size-8 rounded-xl bg-gradient-to-br from-brand-500 to-cyan-400" />
+          <img
+            src="/logo.svg"
+            alt="LeadForge AI"
+            className="size-8"
+            aria-hidden
+          />
           <span className="text-sm font-semibold tracking-tight">
             LeadForge AI
           </span>
